@@ -18,14 +18,16 @@ jobs:
       - name: Configure OCI CLI
         run: |
           mkdir -p ~/.oci
-          echo "[DEFAULT]" > ~/.oci/config
-          echo "user=${{ secrets.OCI_USER_OCID }}" >> ~/.oci/config
-          echo "fingerprint=${{ secrets.OCI_FINGERPRINT }}" >> ~/.oci/config
-          echo "tenancy=${{ secrets.OCI_TENANCY_OCID }}" >> ~/.oci/config
-          echo "region=${{ secrets.OCI_REGION }}" >> ~/.oci/config
-          echo "key_file=~ ~/.oci/key.pem" >> ~/.oci/config
-          echo "${{ secrets.OCI_KEY_FILE }}" > ~/.oci/key.pem
-          chmod 600 ~/.oci/key.pem ~/.oci/config
+          echo "${{ secrets.OCI_KEY_FILE }}" > /home/runner/.oci/key.pem
+          chmod 600 /home/runner/.oci/key.pem
+          
+          echo "[DEFAULT]" > /home/runner/.oci/config
+          echo "user=${{ secrets.OCI_USER_OCID }}" >> /home/runner/.oci/config
+          echo "fingerprint=${{ secrets.OCI_FINGERPRINT }}" >> /home/runner/.oci/config
+          echo "tenancy=${{ secrets.OCI_TENANCY_OCID }}" >> /home/runner/.oci/config
+          echo "region=${{ secrets.OCI_REGION }}" >> /home/runner/.oci/config
+          echo "key_file=/home/runner/.oci/key.pem" >> /home/runner/.oci/config
+          chmod 600 /home/runner/.oci/config
 
       - name: Try Create Instance
         run: |
