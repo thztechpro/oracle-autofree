@@ -1,0 +1,29 @@
+name: Oracle Cloud Instance Requester
+on:
+  schedule:
+    - cron: '*/30 * * * *' # မိနစ် ၃၀ တိုင်း တစ်ခါ run မယ်
+  workflow_dispatch: # လက်နဲ့ manually run လို့ရအောင်
+
+jobs:
+  launch-instance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup OCI CLI
+        uses: oracle-actions/setup-oci-cli@v1
+        with:
+          user_ocid: ${{ secrets.OCI_USER_OCID }}
+          tenancy_ocid: ${{ secrets.OCI_TENANCY_OCID }}
+          fingerprint: ${{ secrets.OCI_FINGERPRINT }}
+          region: ${{ secrets.OCI_REGION }}
+          private_key: ${{ secrets.OCI_KEY_FILE }}
+
+      - name: Try Create Instance
+        run: |
+          oci compute instance launch \
+          --compartment-id ${{ secrets.COMPARTMENT_ID }} \
+          --availability-domain "Uocm:AP-SINGAPORE-1-AD-1" \
+          --shape "VM.Standard.E2.1.Micro" \
+          --subnet-id ${{ secrets.SUBNET_ID }} \
+          --image-id ${{ secrets.IMAGE_ID }} \
+          --assign-public-ip true \
+          --display-name "MyFreeServer"
