@@ -1,8 +1,8 @@
 name: Oracle Cloud Instance Requester
 on:
   schedule:
-    - cron: '*/30 * * * *' # မိနစ် ၃၀ တိုင်း တစ်ခါ run မယ်
-  workflow_dispatch: # လက်နဲ့ manually run လို့ရအောင်
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
 
 jobs:
   launch-instance:
@@ -23,18 +23,18 @@ jobs:
           echo "fingerprint=${{ secrets.OCI_FINGERPRINT }}" >> ~/.oci/config
           echo "tenancy=${{ secrets.OCI_TENANCY_OCID }}" >> ~/.oci/config
           echo "region=${{ secrets.OCI_REGION }}" >> ~/.oci/config
-          echo "key_file=~/.oci/key.pem" >> ~/.oci/config
+          echo "key_file=~ ~/.oci/key.pem" >> ~/.oci/config
           echo "${{ secrets.OCI_KEY_FILE }}" > ~/.oci/key.pem
           chmod 600 ~/.oci/key.pem ~/.oci/config
 
       - name: Try Create Instance
         run: |
           oci compute instance launch \
-          --compartment-id ${{ secrets.COMPARTMENT_ID }} \
+          --compartment-id "${{ secrets.COMPARTMENT_ID }}" \
           --availability-domain "Kres:AP-SINGAPORE-1-AD-1" \
           --shape "VM.Standard.E2.1.Micro" \
-          --subnet-id ${{ secrets.SUBNET_ID }} \
-          --image-id ${{ secrets.IMAGE_ID }} \
+          --subnet-id "${{ secrets.SUBNET_ID }}" \
+          --image-id "${{ secrets.IMAGE_ID }}" \
           --assign-public-ip true \
           --display-name "MyFreeServer" \
-          --metadata '{"ssh_authorized_keys": "${{ secrets.SSH_PUBLIC_KEY }}"}'
+          --metadata "{\"ssh_authorized_keys\": \"${{ secrets.SSH_PUBLIC_KEY }}\"}"
