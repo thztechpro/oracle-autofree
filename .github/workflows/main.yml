@@ -35,7 +35,7 @@ jobs:
 
       - name: Try Create Instance
         run: |
-          # SSH Public Key သန့်စင်ခြင်း
+          # SSH Public Key ထဲက line breaks များ သန့်စင်ခြင်း
           CLEAN_SSH_KEY=$(echo "${{ secrets.SSH_PUBLIC_KEY }}" | tr -d '\n\r')
           
           # Instance Launch Command
